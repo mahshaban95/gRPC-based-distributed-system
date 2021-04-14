@@ -28,6 +28,8 @@ class Branch(example_pb2_grpc.RPCServicer):
             if st != self.id:
                 self.stubList.append('0.0.0.0:5000'+ str(st))
 
+        # set the clock to 0
+        self.clock = 0
 
     # TODO: students are expected to process requests from both Client and Branch
     def MsgDelivery(self,request, context):
@@ -50,8 +52,19 @@ class Branch(example_pb2_grpc.RPCServicer):
                     # checking if the customer's request is a deposit
                     if event.interface == 'deposit':
                         self.balance = self.balance + event.money    #updating the balance
+
+                        self.clock +=1                               #updating the clock (deposit_execute)
+                        print('deposit_execute in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+
                         recv.append({'interface':'deposit','result':'success'})
+
                         # propagating the deposit request to all other branches
+
+                        self.clock +=1                               #updating the clock (deposit_broadcast_request)
+                        print('deposit_broadcast_request in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+
                         for address in self.stubList:
                             # sending request
                             channel = grpc.insecure_channel(address)
@@ -65,6 +78,10 @@ class Branch(example_pb2_grpc.RPCServicer):
                                 print(err.details()) 
                                 print('{}, {}'.format(err.code().name, err.code().value)) 
 
+                        self.clock +=1                              #updating the clock (deposit_response)
+                        print('deposit_response in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                        
+
                     # checking if the customer's request is a withdraw
                     if event.interface == 'withdraw':
 
@@ -77,8 +94,19 @@ class Branch(example_pb2_grpc.RPCServicer):
                             return response
 
                         self.balance = self.balance - event.money   #updating the balance
+                        
+                        self.clock +=1                               #updating the clock (withdraw_execute)
+                        print('withdraw_execute in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+
                         recv.append({'interface':'withdraw','result':'success'})
+
                         # propagating the withdraw request to all other branches
+
+                        self.clock +=1                               #updating the clock (withdraw_broadcast_request)
+                        print('withdraw_broadcast_request in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+
                         for address in self.stubList:
                             # sending request
                             channel = grpc.insecure_channel(address)
@@ -91,6 +119,10 @@ class Branch(example_pb2_grpc.RPCServicer):
                                 print('execption at branch1')
                                 print(err.details()) 
                                 print('{}, {}'.format(err.code().name, err.code().value)) 
+
+                        self.clock +=1                              #updating the clock (withdraw_response)
+                        print('withdraw_response in {} !'.\
+                            format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                            
 
                     # checking if the customer's request is a query
                     if event.interface == 'query':
@@ -110,10 +142,21 @@ class Branch(example_pb2_grpc.RPCServicer):
             for event in request.events:
                 if event.interface == 'deposit':
                     self.balance = self.balance + event.money
+                        
+                    self.clock +=1                               #updating the clock (deposit_broadcast_execute)
+                    print('deposit_broadcast_execute in {} !'.\
+                        format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+
+
                     recv.append({'interface':'deposit','result':'success'})
         
                 if event.interface == 'withdraw':
                     self.balance = self.balance - event.money
+
+                    self.clock +=1                               #updating the clock (withdraw_broadcast_execute)
+                    print('withdraw_broadcast_execute in {} !'.\
+                        format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                    
+
                     recv.append({'interface':'withdraw','result':'success'})
 
             # creating the respomse to the branch
