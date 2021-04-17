@@ -1,7 +1,7 @@
 import json
 import multiprocessing
 from google.protobuf.json_format import MessageToJson
-
+import time
 import Customer
 
 
@@ -28,7 +28,11 @@ if __name__ == '__main__':
   # parsing the input.json file
   for i in input:
     if i['type'] == 'customer':
-      multiprocessing.Process(target=customer_process, args=(i,)).start()
+      print(str(i['id']) + '===' + str(i['events']))
+      p = multiprocessing.Process(target=customer_process, args=(i,))
+      p.start()
+      # p.join()
+
   print('The results will be appended to the "output.text" file created in the same directory! ')
 
 

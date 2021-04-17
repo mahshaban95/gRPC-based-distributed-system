@@ -15,6 +15,7 @@ message Request {
     int32 id = 1;
     string type = 2;
     repeated Events events = 3; 
+    int32 remote_clock = 4;
 }
 
 message Recv {
@@ -26,4 +27,5 @@ message Recv {
 message Response {
     int32 id = 1;
     repeated Recv recv = 2;
+    int32 remote_clock = 3;
 }

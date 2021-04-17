@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rexample.proto\"6\n\x06\x45vents\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tinterface\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"<\n\x07Request\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x17\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x07.Events\"8\n\x04Recv\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"+\n\x08Response\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x13\n\x04recv\x18\x02 \x03(\x0b\x32\x05.Recv2)\n\x03RPC\x12\"\n\x0bMsgDelivery\x12\x08.Request\x1a\t.Responseb\x06proto3'
+  serialized_pb=b'\n\rexample.proto\"6\n\x06\x45vents\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tinterface\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"R\n\x07Request\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x17\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x07.Events\x12\x14\n\x0cremote_clock\x18\x04 \x01(\x05\"8\n\x04Recv\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"A\n\x08Response\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x13\n\x04recv\x18\x02 \x03(\x0b\x32\x05.Recv\x12\x14\n\x0cremote_clock\x18\x03 \x01(\x05\x32)\n\x03RPC\x12\"\n\x0bMsgDelivery\x12\x08.Request\x1a\t.Responseb\x06proto3'
 )
 
 
@@ -100,6 +100,13 @@ _REQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='remote_clock', full_name='Request.remote_clock', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -113,7 +120,7 @@ _REQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=73,
-  serialized_end=133,
+  serialized_end=155,
 )
 
 
@@ -158,8 +165,8 @@ _RECV = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=135,
-  serialized_end=191,
+  serialized_start=157,
+  serialized_end=213,
 )
 
 
@@ -185,6 +192,13 @@ _RESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='remote_clock', full_name='Response.remote_clock', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -197,8 +211,8 @@ _RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=193,
-  serialized_end=236,
+  serialized_start=215,
+  serialized_end=280,
 )
 
 _REQUEST.fields_by_name['events'].message_type = _EVENTS
@@ -246,8 +260,8 @@ _RPC = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=238,
-  serialized_end=279,
+  serialized_start=282,
+  serialized_end=323,
   methods=[
   _descriptor.MethodDescriptor(
     name='MsgDelivery',
