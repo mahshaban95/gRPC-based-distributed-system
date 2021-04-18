@@ -44,8 +44,8 @@ def branch_process(idd, balance, branches):
       time.sleep(5)
 
 
-# using multiprocessing to create different process for each instance of th class Branch
-# if __name__ == '__main__':
-#   for i in input:
-#     if i['type'] == 'branch':
-#       multiprocessing.Process(target=branch_process, args=(i['id'],i['balance'],branches)).start()
+using multiprocessing to create different process for each instance of th class Branch
+if __name__ == '__main__':
+  for i in input:
+    if i['type'] == 'branch':
+      multiprocessing.Process(target=branch_process, args=(i['id'],i['balance'],branches)).start()
