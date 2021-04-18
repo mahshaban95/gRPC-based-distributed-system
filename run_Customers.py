@@ -35,15 +35,14 @@ if __name__ == '__main__':
       p[str(i['id'])].start()
       # p.join()
 
-  print('The results will be appended to the "output.text" file created in the same directory! ')
+  print('The results (for Project 1) will be appended to the "output.text" file created in the same directory! ')
   process_info = list(p.values())
-  print('Preparing the results for part 2 of the project!... ')
+  print('Preparing the results for Project 2!... ')
   while True:
     process_status = []
     for i in process_info:
       process_status.append(i.is_alive())
     if not any(process_status):
-      print(process_status)
       break
   print('The results for project can be found in the "output2.json" file created in the same directory! ')
   result = []

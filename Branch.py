@@ -37,8 +37,6 @@ class Branch(example_pb2_grpc.RPCServicer):
                 "pid": self.id,
                 "data": []
             }
-        # with open("output2.json", "r") as jsonFile:
-        #     self.output2_data = json.load(jsonFile)
 
     # TODO: students are expected to process requests from both Client and Branch
     def MsgDelivery(self,request, context):
@@ -61,48 +59,15 @@ class Branch(example_pb2_grpc.RPCServicer):
                     # checking if the customer's request is a deposit
                     if event.interface == 'deposit':
                         
-                        self.clock = max(self.clock, request.remote_clock) + 1   #updating the clock (deposit_request) #checked
-                        # print('deposit_request in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                        
+                        self.clock = max(self.clock, request.remote_clock) + 1   #updating the clock (deposit_request) 
 
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_request", "clock":self.clock })
-                        #     except:
-                        #         pass
                         self.output2_data["data"].append({ "id": event.id, "name": "deposit_request", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                        #     json.dump(self.output2_data, jsonFile)
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_UN)
                         
-
                         self.balance = self.balance + event.money    #updating the balance
 
-                        self.clock +=1                               #updating the clock (deposit_execute) #checked
-                        # print('deposit_execute in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
-
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_execute", "clock":self.clock })
-                        #     except:
-                        #         pass
+                        self.clock +=1                               #updating the clock (deposit_execute) 
+  
                         self.output2_data["data"].append({ "id": event.id, "name": "deposit_execute", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                        #     json.dump(self.output2_data, jsonFile)
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_UN)
 
                         recv.append({'interface':'deposit','result':'success'})
 
@@ -116,73 +81,25 @@ class Branch(example_pb2_grpc.RPCServicer):
                             request_prop.remote_clock = self.clock
                             try:
                                 response_prob = stub.MsgDelivery(request_prop)
-                                self.clock = max(self.clock, response_prob.remote_clock) + 1   #updating the clock (deposit_propagate_response)  #checked
-                                # print('deposit_propagate_response in {} !'.\
-                                #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                        
+                                self.clock = max(self.clock, response_prob.remote_clock) + 1   #updating the clock (deposit_propagate_response) 
 
-                                # with open("output2.json", "r") as jsonFile:
-                                #     self.output2_data = json.load(jsonFile)
-
-                                # for i in range(len(self.output2_data)):
-                                #     try:
-                                #         if self.output2_data[i]['pid'] == self.id:
-                                #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_propagate_response", "clock":self.clock })
-                                #     except:
-                                #         pass
                                 self.output2_data["data"].append({ "id": event.id, "name": "deposit_propagate_response", "clock":self.clock })
-
-                                # with open("output2.json", "w") as jsonFile:
-                                #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                                #     json.dump(self.output2_data, jsonFile)
-                                #     fcntl.flock(jsonFile, fcntl.LOCK_UN)
 
                             except grpc.RpcError as err:
                                 print('execption at branch1')
                                 print(err.details()) 
                                 print('{}, {}'.format(err.code().name, err.code().value)) 
 
-                        self.clock +=1                              #updating the clock (deposit_response) #checked
-                        # print('deposit_response in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id)) 
+                        self.clock +=1                              #updating the clock (deposit_response) 
 
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_response", "clock":self.clock })
-                        #     except:
-                        #         pass
-                        self.output2_data["data"].append({ "id": event.id, "name": "deposit_response", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                        #     json.dump(self.output2_data, jsonFile)
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_UN)                       
+                        self.output2_data["data"].append({ "id": event.id, "name": "deposit_response", "clock":self.clock })                 
 
                     # checking if the customer's request is a withdraw
                     if event.interface == 'withdraw':
 
-                        self.clock = max(self.clock, request.remote_clock) + 1   #updating the clock (withdraw_request) #checked
-                        # print('withdraw_request in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id)) 
+                        self.clock = max(self.clock, request.remote_clock) + 1   #updating the clock (withdraw_request) 
 
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_request", "clock":self.clock })
-                        #     except:
-                        #         pass
                         self.output2_data["data"].append({ "id": event.id, "name": "withdraw_request", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                        #     json.dump(self.output2_data, jsonFile)
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_UN)
 
                         # checking if balance is enough!
                         if event.money > self.balance:
@@ -194,31 +111,13 @@ class Branch(example_pb2_grpc.RPCServicer):
 
                         self.balance = self.balance - event.money   #updating the balance
                         
-                        self.clock +=1                               #updating the clock (withdraw_execute) #checked
-                        # print('withdraw_execute in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+                        self.clock +=1                               #updating the clock (withdraw_execute) 
 
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_execute", "clock":self.clock })
-                        #     except:
-                        #         pass
                         self.output2_data["data"].append({ "id": event.id, "name": "withdraw_execute", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                        #     json.dump(self.output2_data, jsonFile)
-                        #     fcntl.flock(jsonFile, fcntl.LOCK_UN) 
 
                         recv.append({'interface':'withdraw','result':'success'})
 
                         # propagating the withdraw request to all other branches
-
-
                         for address in self.stubList:
                             # sending request
                             channel = grpc.insecure_channel(address)
@@ -228,48 +127,18 @@ class Branch(example_pb2_grpc.RPCServicer):
                             request_prop.remote_clock = self.clock
                             try:
                                 response_prob = stub.MsgDelivery(request_prop)
-                                self.clock = max(self.clock, response_prob.remote_clock) + 1   #updating the clock (withdraw_propagate_response) #checked
-                                # print('withdraw_propagate_response in {} !'.\
-                                #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                        
+                                self.clock = max(self.clock, response_prob.remote_clock) + 1   #updating the clock (withdraw_propagate_response) 
 
-                                # with open("output2.json", "r") as jsonFile:
-                                #     self.output2_data = json.load(jsonFile)
-
-                                # for i in range(len(self.output2_data)):
-                                #     try:
-                                #         if self.output2_data[i]['pid'] == self.id:
-                                #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_propagate_response", "clock":self.clock })
-                                #     except:
-                                #         pass
                                 self.output2_data["data"].append({ "id": event.id, "name": "withdraw_propagate_response", "clock":self.clock })
-
-                                # with open("output2.json", "w") as jsonFile:
-                                #     fcntl.flock(jsonFile, fcntl.LOCK_EX)
-                                #     json.dump(self.output2_data, jsonFile)
-                                #     fcntl.flock(jsonFile, fcntl.LOCK_UN)
 
                             except grpc.RpcError as err:
                                 print('execption at branch1')
                                 print(err.details()) 
                                 print('{}, {}'.format(err.code().name, err.code().value)) 
 
-                        self.clock +=1                              #updating the clock (withdraw_response) #checked
-                        # print('withdraw_response in {} !'.\
-                        #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                            
+                        self.clock +=1                              #updating the clock (withdraw_response) 
 
-                        # with open("output2.json", "r") as jsonFile:
-                        #     self.output2_data = json.load(jsonFile)
-
-                        # for i in range(len(self.output2_data)):
-                        #     try:
-                        #         if self.output2_data[i]['pid'] == self.id:
-                        #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_response", "clock":self.clock })
-                        #     except:
-                        #         pass
                         self.output2_data["data"].append({ "id": event.id, "name": "withdraw_response", "clock":self.clock })
-
-                        # with open("output2.json", "w") as jsonFile:
-                        #     json.dump(self.output2_data, jsonFile) 
 
                     # checking if the customer's request is a query
                     if event.interface == 'query':
@@ -296,85 +165,29 @@ class Branch(example_pb2_grpc.RPCServicer):
             for event in request.events:
                 if event.interface == 'deposit':
 
-                    self.clock = max(self.clock, request.remote_clock) + 1  #updating the clock (deposit_propagate_request) #checked
-                    # print('deposit_propagate_request in {} !'.\
-                    #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+                    self.clock = max(self.clock, request.remote_clock) + 1  #updating the clock (deposit_propagate_request) 
 
-                    # with open("output2.json", "r") as jsonFile:
-                    #     self.output2_data = json.load(jsonFile)
-
-                    # for i in range(len(self.output2_data)):
-                    #     try:
-                    #         if self.output2_data[i]['pid'] == self.id:
-                    #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_propagate_request", "clock":self.clock })
-                    #     except:
-                    #         pass
                     self.output2_data["data"].append({ "id": event.id, "name": "deposit_propagate_request", "clock":self.clock })
-
-                    # with open("output2.json", "w") as jsonFile:
-                    #     json.dump(self.output2_data, jsonFile) 
 
                     self.balance = self.balance + event.money
                         
-                    self.clock +=1                               #updating the clock (deposit_propagate_execute) #checked
-                    # print('deposit_propagate_execute in {} !'.\
-                    #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+                    self.clock +=1                               #updating the clock (deposit_propagate_execute) 
 
-                    # with open("output2.json", "r") as jsonFile:
-                    #     self.output2_data = json.load(jsonFile)
-
-                    # for i in range(len(self.output2_data)):
-                    #     try:
-                    #         if self.output2_data[i]['pid'] == self.id:
-                    #             self.output2_data[i]["data"].append({ "id": event.id, "name": "deposit_propagate_execute", "clock":self.clock })
-                    #     except:
-                    #         pass
                     self.output2_data["data"].append({ "id": event.id, "name": "deposit_propagate_execute", "clock":self.clock })
-
-                    # with open("output2.json", "w") as jsonFile:
-                    #     json.dump(self.output2_data, jsonFile) 
 
                     recv.append({'interface':'deposit','result':'success'})
         
                 if event.interface == 'withdraw':
 
-                    self.clock = max(self.clock, request.remote_clock) + 1  #updating the clock (withdraw_propagate_request) #checked
-                    # print('withdraw_propagate_request in {} !'.\
-                    #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))
+                    self.clock = max(self.clock, request.remote_clock) + 1  #updating the clock (withdraw_propagate_request) 
 
-                    # with open("output2.json", "r") as jsonFile:
-                    #     self.output2_data = json.load(jsonFile)
-
-                    # for i in range(len(self.output2_data)):
-                    #     try:
-                    #         if self.output2_data[i]['pid'] == self.id:
-                    #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_propagate_request", "clock":self.clock })
-                    #     except:
-                    #         pass
                     self.output2_data["data"].append({ "id": event.id, "name": "withdraw_propagate_request", "clock":self.clock })
-
-                    # with open("output2.json", "w") as jsonFile:
-                    #     json.dump(self.output2_data, jsonFile) 
 
                     self.balance = self.balance - event.money
 
-                    self.clock +=1                               #updating the clock (withdraw_propagate_execute) #checked
-                    # print('withdraw_propagate_execute in {} !'.\
-                    #     format(self.id) + ' Clock is '+ str(self.clock) + ' id : ' + str(event.id))                    
+                    self.clock +=1                               #updating the clock (withdraw_propagate_execute) 
 
-                    # with open("output2.json", "r") as jsonFile:
-                    #     self.output2_data = json.load(jsonFile)
-
-                    # for i in range(len(self.output2_data)):
-                    #     try:
-                    #         if self.output2_data[i]['pid'] == self.id:
-                    #             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_propagate_execute", "clock":self.clock })
-                    #     except:
-                    #         pass
                     self.output2_data["data"].append({ "id": event.id, "name": "withdraw_propagate_execute", "clock":self.clock })
-
-                    # with open("output2.json", "w") as jsonFile:
-                    #     json.dump(self.output2_data, jsonFile) 
 
                     recv.append({'interface':'withdraw','result':'success'})
 
