@@ -33,6 +33,21 @@ for i in input:
 with open('output2.json', 'w') as outfile:
     json.dump(output2, outfile)
 
+
+# id = 2
+# with open("output2_"+ str(id) +".json", "w") as jsonFile:
+#     output2_data = json.load(jsonFile)
+
+# for i in range(len(self.output2_data)):
+#     try:
+#         if self.output2_data[i]['pid'] == self.id:
+#             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_propagate_execute", "clock":self.clock })
+#     except:
+#         pass
+
+# with open("output2.json", "w") as jsonFile:
+#     json.dump(self.output2_data, jsonFile) 
+
 # define a function to create an instance of the class Branch
 def branch_process(idd, balance, branches):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=5))
@@ -41,10 +56,10 @@ def branch_process(idd, balance, branches):
     server.start()
     print('Branch '+str(idd) +' server started. Listening at 0.0.0.0:5000'+ str(idd) +'.')
     while True:
-      time.sleep(5)
+      time.sleep(100)
 
 
-using multiprocessing to create different process for each instance of th class Branch
+# using multiprocessing to create different process for each instance of th class Branch
 if __name__ == '__main__':
   for i in input:
     if i['type'] == 'branch':
