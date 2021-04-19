@@ -29,7 +29,7 @@ class Branch(example_pb2_grpc.RPCServicer):
             if st != self.id:
                 self.stubList.append('0.0.0.0:5000'+ str(st))
 
-        # set the clock to 0
+        # set the logical clock to 1
         self.clock = 1
 
         # list of the output for project 2

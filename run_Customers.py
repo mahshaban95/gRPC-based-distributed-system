@@ -38,6 +38,7 @@ if __name__ == '__main__':
   print('The results (for Project 1) will be appended to the "output.text" file created in the same directory! ')
   process_info = list(p.values())
   print('Preparing the results for Project 2!... ')
+  # Waiting until all customer processes are finished
   while True:
     process_status = []
     for i in process_info:
@@ -45,6 +46,7 @@ if __name__ == '__main__':
     if not any(process_status):
       break
   print('The results for project can be found in the "output2.json" file created in the same directory! ')
+  # merging all data from different branches to a single file
   result = []
   for f in glob.glob("output2_*.json"):
       with open(f, "rb") as infile:
@@ -53,15 +55,18 @@ if __name__ == '__main__':
   with open("merged_file.json", "w") as outfile:
       json.dump(result, outfile)
 
+  # reading data from the merged file to get events data
   output2_data = []
   with open("merged_file.json", "rb") as infile:
       output2_data = json.load(infile)
 
+  # getting all events data in a single list
   eventid_data = []
   for i in output2_data:
     for j in i['data']:
       eventid_data.append(j)
 
+  # building the main structure for the eventid to which the events will be appended
   eventid = []
   for i in input:
     if i['type'] == 'customer':
@@ -69,15 +74,19 @@ if __name__ == '__main__':
         if j['interface'] in {'deposit', 'withdraw'}:
           eventid.append({"eventid": j['id'], "data": []})  
 
+  # sorting and grouping the events based on the id
   eventid_data.sort(key=lambda x:x.get('id'))
   for k,v in groupby(eventid_data,key=lambda x:x.get('id')):
+    # appending the events data to the eventid main object
     for i in eventid:
       if i['eventid'] == k:
         mm = list(v)
         mm.sort(key=lambda x:x.get('clock'))
         i['data'] = (mm)
 
-  output2_data.sort(key=lambda x:x.get('pid'))
+  output2_data.sort(key=lambda x:x.get('pid')) # sorting the branches data based on the pid
+  # appending the events grouped data to the main output array
   output2_data.append(eventid)
+  # creating the output file
   with open("output2.json", "w") as outfile:
     json.dump(output2_data, outfile)

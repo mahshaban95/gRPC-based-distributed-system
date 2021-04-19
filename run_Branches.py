@@ -22,32 +22,6 @@ for i in input:
     output2.append({"pid": i['id'], "data": []})        # pid number for all branches along with an empty list fot their data was created 
 
 
-# appending the event id after pid
-for i in input:
-  if i['type'] == 'customer':
-    for j in i['events']:
-      if j['interface'] in {'deposit', 'withdraw'}:
-        output2.append({"eventid": j['id'], "data": []})
-
-# storing the output2 list into the json file that will be updated later in each branch 
-with open('output2.json', 'w') as outfile:
-    json.dump(output2, outfile)
-
-
-# id = 2
-# with open("output2_"+ str(id) +".json", "w") as jsonFile:
-#     output2_data = json.load(jsonFile)
-
-# for i in range(len(self.output2_data)):
-#     try:
-#         if self.output2_data[i]['pid'] == self.id:
-#             self.output2_data[i]["data"].append({ "id": event.id, "name": "withdraw_propagate_execute", "clock":self.clock })
-#     except:
-#         pass
-
-# with open("output2.json", "w") as jsonFile:
-#     json.dump(self.output2_data, jsonFile) 
-
 # define a function to create an instance of the class Branch
 def branch_process(idd, balance, branches):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=5))
